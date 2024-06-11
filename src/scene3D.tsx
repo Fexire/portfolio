@@ -3,6 +3,7 @@ import React, { useRef, useState, useMemo, createContext, useContext } from 'rea
 import { Canvas, useFrame, ThreeElements, ThreeEvent } from '@react-three/fiber'
 import { useGLTF, useAnimations, Environment, Text } from '@react-three/drei'
 import cv from "./cv.json"
+import { element } from 'three/examples/jsm/nodes/Nodes.js'
 
 
 function CenterCylinder(props: ThreeElements['mesh']) {
@@ -36,10 +37,16 @@ interface CapsuleLoookingContextValue {
 
 const CapsuleLookingContext = createContext<CapsuleLoookingContextValue>({} as CapsuleLoookingContextValue)
 
-function Capsule(props: ThreeElements['group']) {
+interface CapsuleProps {
+    key: number
+    position: THREE.Vector3
+    element: any
+}
+
+function Capsule(props: CapsuleProps) {
     const capsuleFile = useGLTF("Capsule.glb");
     const capsuleClone = useMemo(() => capsuleFile.scene.clone(), [capsuleFile.scene]);
-    const objectFile = useGLTF("dut.glb");
+    const objectFile = useGLTF(props.element.path3D);
     const objectClone = useMemo(() => objectFile.scene.clone(), [objectFile.scene]);
     const capsulePrimRef = useRef<THREE.Mesh>(null!)
     const { actions, mixer } = useAnimations(capsuleFile.animations, capsulePrimRef);
@@ -51,6 +58,7 @@ function Capsule(props: ThreeElements['group']) {
     var [isLooking, setIsLooking] = useState(false)
     const [previousPosition, setPreviousPosition] = useState(new THREE.Vector3())
     const { isLookingAtCapsule, setIsLookingAtCapsule } = useContext(CapsuleLookingContext)
+
 
     function runOpenCapsuleAnimation() {
         actions.ClosingBot?.stop()
@@ -149,12 +157,15 @@ interface StandWithCapsulesProps {
     capsuleNumber: number
     position: THREE.Vector3
     name: string
+    elements: any
     key: number
 }
 
 function StandWithCapsules(props: StandWithCapsulesProps) {
 
     var [position, setPosition] = useState(new THREE.Vector3(0, 0, 0))
+
+
 
     var [capsulePositions, setCapsulePositions] = useState(Array<THREE.Vector3>(props.capsuleNumber).fill(new THREE.Vector3(0, 0, 0)).map((_, i) => {
         if (props.capsuleNumber > 1) {
@@ -172,7 +183,7 @@ function StandWithCapsules(props: StandWithCapsulesProps) {
 
     function generateCapsules() {
         return Array(props.capsuleNumber).fill(0).map((_, i) => {
-            return <Capsule key={i} position={capsulePositions[i]} />
+            return <Capsule key={i} position={capsulePositions[i]} element={props.elements[i]} />
         })
     }
 
@@ -238,7 +249,7 @@ function ArmStuct(props: ArmStructProps) {
     function generateStands() {
         return Array(props.armsNumber).fill(0).map((_, i) => {
             var elements = cv[Object.keys(cv)[i]]
-            return <StandWithCapsules key={i} name={Object.keys(cv)[i]} position={standsPosition[i]} capsuleNumber={Array.isArray(elements) ? elements.length : Object.keys(elements).length} />;
+            return <StandWithCapsules key={i} elements={elements} name={Object.keys(cv)[i]} position={standsPosition[i]} capsuleNumber={elements.length} />;
         })
     }
 
