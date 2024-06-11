@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import React, { useRef, useState, useMemo, createContext, useContext } from 'react'
 import { Canvas, useFrame, ThreeElements, ThreeEvent } from '@react-three/fiber'
-import { useGLTF, Text3D, useAnimations } from '@react-three/drei'
+import { useGLTF, useAnimations, Environment, Text } from '@react-three/drei'
 import cv from "./cv.json"
 
 
@@ -23,6 +23,12 @@ function Stand(props: ThreeElements['mesh']) {
     return <primitive {...props} object={clone} />
 }
 
+function Pipe(props: ThreeElements['mesh']) {
+    const scene = useGLTF("Pipe.glb").scene;
+    const clone = useMemo(() => scene.clone(), [scene]);
+    return <primitive {...props} object={clone} />
+}
+
 interface CapsuleLoookingContextValue {
     isLookingAtCapsule: boolean;
     setIsLookingAtCapsule: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,14 +39,14 @@ const CapsuleLookingContext = createContext<CapsuleLoookingContextValue>({} as C
 function Capsule(props: ThreeElements['group']) {
     const capsuleFile = useGLTF("Capsule.glb");
     const capsuleClone = useMemo(() => capsuleFile.scene.clone(), [capsuleFile.scene]);
-    const objectFile = useGLTF("Cube.glb");
+    const objectFile = useGLTF("dut.glb");
     const objectClone = useMemo(() => objectFile.scene.clone(), [objectFile.scene]);
     const capsulePrimRef = useRef<THREE.Mesh>(null!)
     const { actions, mixer } = useAnimations(capsuleFile.animations, capsulePrimRef);
     const objectRef = useRef<ThreeElements['primitive']>(null!)
     const capsuleRef = useRef<THREE.Group>(null!)
-    var [nextPosition, setNextPosition] = useState(new THREE.Vector3(0, 7, 12))
-    const moveSpeed = 0.1
+    var [nextPosition, setNextPosition] = useState(new THREE.Vector3(0, 0.7, 3))
+    const moveSpeed = 0.01
     var [isMoving, setIsMoving] = useState(false)
     var [isLooking, setIsLooking] = useState(false)
     const [previousPosition, setPreviousPosition] = useState(new THREE.Vector3())
@@ -133,8 +139,8 @@ function Capsule(props: ThreeElements['group']) {
     })
 
     return <group {...props} ref={capsuleRef} onClick={move}>
-        <primitive ref={capsulePrimRef} object={capsuleClone} />
-        <primitive ref={objectRef} scale={[0.7, 0.7, 0.7]} object={objectClone} />
+        <primitive ref={capsulePrimRef} object={capsuleClone} scale={[1.5, 1.5, 1.5]} />
+        <primitive ref={objectRef} scale={[0.15, 0.15, 0.15]} object={objectClone} />
     </group>
 }
 
@@ -152,11 +158,11 @@ function StandWithCapsules(props: StandWithCapsulesProps) {
 
     var [capsulePositions, setCapsulePositions] = useState(Array<THREE.Vector3>(props.capsuleNumber).fill(new THREE.Vector3(0, 0, 0)).map((_, i) => {
         if (props.capsuleNumber > 1) {
-            const gap = 19 / (props.capsuleNumber - 1);
-            const start = -10;
-            return new THREE.Vector3(start + i * gap, 1, 0);
+            const gap = 2 / (props.capsuleNumber - 1);
+            const start = -1;
+            return new THREE.Vector3(start + i * gap, 0.3, 0);
         } else {
-            return new THREE.Vector3(0, 1, 0);
+            return new THREE.Vector3(0, 0.3, 0);
         }
     }))
 
@@ -173,11 +179,10 @@ function StandWithCapsules(props: StandWithCapsulesProps) {
     return <group position={position}>
         <Stand onClick={(e) => { e.stopPropagation() }} />
         {generateCapsules()}
-        <Text3D position={[-9, -0.5, 3]} font={"fonts/Impact_Regular.json"}>
+        <Text scale={0.2} position={[0, 0.02, 0.4]} color={"white"} font={"fonts/impact.ttf"} >
             {props.name}
-        </Text3D>
+        </Text>
     </group>
-
 }
 
 interface ArmStructProps {
@@ -192,7 +197,7 @@ function ArmStuct(props: ArmStructProps) {
     const stopForce = 0.0002
     const maxVelocity = 0.05
     var [standsPosition, setStandsPosition] = useState(Array<THREE.Vector3>(props.armsNumber).fill(new THREE.Vector3(0, 0, 0)).map((_, i) => {
-        var position = new THREE.Vector3(0, -1.5, 10);
+        var position = new THREE.Vector3(0, 0, 2);
         position.applyAxisAngle(new THREE.Vector3(1, 0, 0), -i * (2 * Math.PI / props.armsNumber))
         return position;
     }))
@@ -200,7 +205,7 @@ function ArmStuct(props: ArmStructProps) {
     function moveStands() {
         setStandsPosition((prevStandsPositions) => {
             prevStandsPositions.forEach((e, i) => {
-                var position = new THREE.Vector3(0, -1.5, 10);
+                var position = new THREE.Vector3(0, 0, 2.05);
                 position.applyAxisAngle(new THREE.Vector3(1, 0, 0), ref.current.rotation.x + i * (2 * Math.PI / props.armsNumber))
                 e.copy(position)
             })
@@ -224,7 +229,7 @@ function ArmStuct(props: ArmStructProps) {
     function generateArms() {
         return Array(props.armsNumber).fill(0).map((_, i) => {
             var rotation_x = i * (2 * Math.PI / props.armsNumber);
-            var position = new THREE.Vector3(0, 0, 3);
+            var position = new THREE.Vector3(0, 0, 1);
             position.applyAxisAngle(new THREE.Vector3(1, 0, 0), rotation_x);
             return <Arm onClick={(e) => { e.stopPropagation() }} key={i} position={position} rotation={[rotation_x, 0, 0]} />;
         })
@@ -240,6 +245,7 @@ function ArmStuct(props: ArmStructProps) {
     return <group>
         <group ref={ref} position={[0, 0, 0]}>
             <CenterCylinder onClick={(e) => { e.stopPropagation() }} position={[0, 0, 0]} />
+            <Pipe onClick={(e) => { e.stopPropagation() }} position={[0, 0, 0]} />
             {generateArms()}
         </group>
         {generateStands()}
@@ -254,10 +260,8 @@ function Scene3D() {
     const [isLookingAtCapsule, setIsLookingAtCapsule] = useState(false)
 
     return (
-        <Canvas onWheel={(e) => isLookingAtCapsule ? 0 : setScroll(scrollDeltaY + -e.deltaY)} camera={{ fov: 75, position: [0, 10, 25] }}>
-            <ambientLight intensity={Math.PI / 2} />
-            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
-            <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
+        <Canvas shadows onWheel={(e) => isLookingAtCapsule ? 0 : setScroll(scrollDeltaY + -e.deltaY)} camera={{ fov: 75, position: [0, 1, 4] }}>
+            <Environment files="wasteland_clouds_puresky_1k.exr" background backgroundRotation={[0, .5, 0]} />
             <CapsuleLookingContext.Provider value={{ isLookingAtCapsule, setIsLookingAtCapsule }}>
                 <ArmStuct scrollDeltaY={scrollDeltaY} armsNumber={Object.keys(cv).length} />
             </CapsuleLookingContext.Provider>

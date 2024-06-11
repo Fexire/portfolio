@@ -4,59 +4,71 @@
             "Diplôme": "Master informatique spécialité Sciences de l'image",
             "Mention": "Très bien",
             "Année d'obtention": "2022",
-            "Localisation": "Université Gustave Eiffel"
+            "Localisation": "Université Gustave Eiffel",
+            "path3D": "master.glb"
         },
         {
             "Diplôme": "Licence informatique",
             "Mention": "Bien",
             "Année d'obtention": "2020",
-            "Localisation": "Université Paris-Est Marne-la-Vallée"
+            "Localisation": "Université Paris-Est Marne-la-Vallée",
+            "path3D": "licence.glb"
         },
         {
             "Diplôme": "Diplôme de technicien supérieur informatique",
             "Mention": "",
             "Année d'obtention": "2019",
-            "Localisation": "Université Paris-Est Marne-la-Vallée"
+            "Localisation": "Université Paris-Est Marne-la-Vallée",
+            "path3D": "dut.glb"
         }
     ],
-    "Compétences": {
-        "Languages": [
-            "C++",
-            "Python",
-            "C#",
-            "C",
-            "JAVA",
-            "JavaScript",
-            "SQL",
-            "HTML",
-            "CSS"
-        ],
-        "Outils": [
-            "Unreal Engine",
-            "Blender",
-            "Git",
-            "VScode",
-            "OpenGL",
-            "GLSL",
-            "OpenCV",
-            "VTK",
-            "Unity"
-        ],
-        "Langues": [
-            {
-                "Langue": "Français",
-                "Expérience": "Langue natale"
-            },
-            {
-                "Langue": "Anglais",
-                "Expérience": "Capacités professionnelles"
-            },
-            {
-                "Langue": "Espagnol",
-                "Expérience": "Notions élémentaires"
-            }
-        ]
-    },
+    "Compétences": [
+        {
+            "Languages": [
+                "C++",
+                "Python",
+                "C#",
+                "C",
+                "JAVA",
+                "JavaScript",
+                "SQL",
+                "HTML",
+                "CSS"
+            ],
+            "path3D": "dut.glb"
+        },
+        {
+            "Outils": [
+                "Unreal Engine",
+                "Blender",
+                "Git",
+                "VScode",
+                "OpenGL",
+                "GLSL",
+                "OpenCV",
+                "VTK",
+                "Unity"
+            ],
+            "path3D": "dut.glb"
+        },
+        {
+            "Langues": [
+                {
+                    "Langue": "Français",
+                    "Expérience": "Langue natale"
+                },
+                {
+                    "Langue": "Anglais",
+                    "Expérience": "Capacités professionnelles"
+                },
+                {
+                    "Langue": "Espagnol",
+                    "Expérience": "Notions élémentaires"
+                }
+            ],
+            "path3D": "dut.glb"
+        }
+    ],
     "Expériences Professionnelles": [
         {
             "Fonction": "Freelance Technical artist / Tools developer",
@@ -67,7 +79,8 @@
                 "Développement d’outils Blender 3.6 en Python pour le prototypage de tente.",
                 "Génération de maillage paramétrique/procédural, édition de maillage, édition de tissu, Simulation avancée, remaillage.",
                 "Conseil sur les possibilités et les limites du projet."
-            ]
+            ],
+            "path3D": "dut.glb"
         },
         {
             "Fonction": "Ingénieur R&D traitement d'images (stage)",
@@ -78,7 +91,8 @@
                 "Développement d'une méthode de remaillage en se basant sur l'état de l'art. Développé en C++ avec VTK.",
                 "Recalage de volume 3D cardiologique et extraction de dispositif médical implantable automatique.",
                 "Adaptation d'un algorithme permettant de créer et orienter un repère de Serret-Frenet en fonction de la surface d'intérêt."
-            ]
+            ],
+            "path3D": "dut.glb"
         },
         {
             "Fonction": "Développeur de modules applicatifs (stage)",
@@ -88,7 +102,8 @@
             "Missions": [
                 "Développement de macro pour retranscrire des modifications effectuées en réalité virtuelle sur des fichiers de maquettes CAO principalement en VBA (Catia V5, SolidWorks, 3Dexperience, Inventor, Revit).",
                 "Développement d'algorithmes de calcul de propriétés d'un maillage 3D en C# (connexion entre deux maillage, volume, surface, détection de faces,...)."
-            ]
+            ],
+            "path3D": "dut.glb"
         },
         {
             "Fonction": "Développeur de chatbots et d'application web (stage)",
@@ -98,24 +113,29 @@
             "Missions": [
                 "Conception et développement de chatbots.",
                 "Développement d'une application web permettant les tests de non-regression sur un chatbot."
-            ]
+            ],
+            "path3D": "dut.glb"
         }
     ],
     "Projets personnels": [
         {
             "Sujet": "Jeu de plateforme à la première personne",
-            "Description": "Développement d'un prototype de jeu de plateforme FPS avec Unreal Engine 5. Le but étant de créer plusieurs capacités de déplacement rapide permettant de parcourir un niveau le plus rapidement possible. Le jeu possède un système de monnaie permettant d'acheter de nouvelles compétences après chaque niveau."
+            "Description": "Développement d'un prototype de jeu de plateforme FPS avec Unreal Engine 5. Le but étant de créer plusieurs capacités de déplacement rapide permettant de parcourir un niveau le plus rapidement possible. Le jeu possède un système de monnaie permettant d'acheter de nouvelles compétences après chaque niveau.",
+            "path3D": "dut.glb"
         }
     ],
     "Loisirs": [
         {
-            "Sujets": "E-sport"
+            "Sujets": "E-sport",
+            "path3D": "dut.glb"
         },
         {
-            "Sujets": "innovations scientifiques"
+            "Sujets": "innovations scientifiques",
+            "path3D": "dut.glb"
         },
         {
-            "Sujets": "La création artistique"
+            "Sujets": "La création artistique",
+            "path3D": "dut.glb"
         }
     ]
 }
