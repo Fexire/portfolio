@@ -53,18 +53,14 @@
         },
         {
             "Langues": [
-                {
-                    "Langue": "Français",
-                    "Expérience": "Langue natale"
-                },
-                {
-                    "Langue": "Anglais",
-                    "Expérience": "Capacités professionnelles"
-                },
-                {
-                    "Langue": "Espagnol",
-                    "Expérience": "Notions élémentaires"
-                }
+                "Français",
+                "Anglais",
+                "Espagnol"
+            ],
+            "Expériences": [
+                "Langue natale",
+                "Capacités professionnelles",
+                "Notions élémentaires"
             ],
             "path3D": "langues.glb"
         }
@@ -126,15 +122,15 @@
     ],
     "Loisirs": [
         {
-            "Sujets": "E-sport",
+            "Sujet": "E-sport",
             "path3D": "esport.glb"
         },
         {
-            "Sujets": "innovations scientifiques",
+            "Sujet": "innovations scientifiques",
             "path3D": "science.glb"
         },
         {
-            "Sujets": "La création artistique",
+            "Sujet": "La création artistique",
             "path3D": "art.glb"
         }
     ]

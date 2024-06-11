@@ -3,7 +3,9 @@ import React, { useRef, useState, useMemo, createContext, useContext } from 'rea
 import { Canvas, useFrame, ThreeElements, ThreeEvent } from '@react-three/fiber'
 import { useGLTF, useAnimations, Environment, Text } from '@react-three/drei'
 import cv from "./cv.json"
+import { CapsuleLookingContext } from './main'
 import { element } from 'three/examples/jsm/nodes/Nodes.js'
+import { Experience, Formation, Hobby, Languages, LanguagesTalk, Project, Tools, Void } from './elements'
 
 
 function CenterCylinder(props: ThreeElements['mesh']) {
@@ -29,35 +31,33 @@ function Pipe(props: ThreeElements['mesh']) {
     const clone = useMemo(() => scene.clone(), [scene]);
     return <primitive {...props} object={clone} />
 }
+enum Category {
+    Formation,
 
-interface CapsuleLoookingContextValue {
-    isLookingAtCapsule: boolean;
-    setIsLookingAtCapsule: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-const CapsuleLookingContext = createContext<CapsuleLoookingContextValue>({} as CapsuleLoookingContextValue)
 
 interface CapsuleProps {
     key: number
     position: THREE.Vector3
-    element: any
+    element: JSX.Element
+    path3D: string
 }
 
 function Capsule(props: CapsuleProps) {
     const capsuleFile = useGLTF("Capsule.glb");
     const capsuleClone = useMemo(() => capsuleFile.scene.clone(), [capsuleFile.scene]);
-    const objectFile = useGLTF(props.element.path3D);
+    const objectFile = useGLTF(props.path3D);
     const objectClone = useMemo(() => objectFile.scene.clone(), [objectFile.scene]);
     const capsulePrimRef = useRef<THREE.Mesh>(null!)
     const { actions, mixer } = useAnimations(capsuleFile.animations, capsulePrimRef);
     const objectRef = useRef<ThreeElements['primitive']>(null!)
     const capsuleRef = useRef<THREE.Group>(null!)
-    var [nextPosition, setNextPosition] = useState(new THREE.Vector3(0, 0.7, 3))
+    var [nextPosition, setNextPosition] = useState(new THREE.Vector3(0, 0.8, 3.3))
     const moveSpeed = 0.01
     var [isMoving, setIsMoving] = useState(false)
     var [isLooking, setIsLooking] = useState(false)
     const [previousPosition, setPreviousPosition] = useState(new THREE.Vector3())
-    const { isLookingAtCapsule, setIsLookingAtCapsule } = useContext(CapsuleLookingContext)
+    const { isLookingAtCapsule, setIsLookingAtCapsule, setElement } = useContext(CapsuleLookingContext)
 
 
     function runOpenCapsuleAnimation() {
@@ -107,6 +107,7 @@ function Capsule(props: CapsuleProps) {
                 setPreviousPosition(worldPos)
                 if (isLooking) {
                     runCloseCapsuleAnimation();
+                    setElement(<Void></Void>);
                 } else {
                     setIsMoving(true)
                 }
@@ -131,6 +132,7 @@ function Capsule(props: CapsuleProps) {
             if (!isLooking) {
                 runOpenCapsuleAnimation()
                 setIsLooking(!isLooking)
+                setElement(props.element)
             } else {
                 setIsLookingAtCapsule(false)
                 setIsLooking(!isLooking)
@@ -183,7 +185,29 @@ function StandWithCapsules(props: StandWithCapsulesProps) {
 
     function generateCapsules() {
         return Array(props.capsuleNumber).fill(0).map((_, i) => {
-            return <Capsule key={i} position={capsulePositions[i]} element={props.elements[i]} />
+            var element = <Void></Void>
+            if (props.name == "Formations") {
+                element = <Formation diploma={props.elements[i]["Diplôme"]} mention={props.elements[i]["Mention"]} address={props.elements[i]["Localisation"]} year={props.elements[i]["Année d'obtention"]} ></Formation>
+            }
+            else if (props.name == "Expériences Professionnelles") {
+                element = <Experience job={props.elements[i]["Fonction"]} company={props.elements[i]["Entreprise"]} duration={props.elements[i]["Période"]} address={props.elements[i]["Lieu"]} missions={props.elements[i]["Missions"]}></Experience>
+            }
+            else if (props.name == "Projets personnels") {
+                element = <Project subject={props.elements[i]["Sujet"]} description={props.elements[i]["Description"]} ></Project>
+            }
+            else if (props.name == "Loisirs") {
+                element = <Hobby subject={props.elements[i]["Sujet"]} description={props.elements[i]["Description"]} ></Hobby>
+            } else if (props.name == "Compétences") {
+                if (i == 0) {
+                    element = <Languages names={props.elements[i]["Languages"]}  ></Languages>
+                } else if (i == 1) {
+                    element = <Tools names={props.elements[i]["Outils"]}  ></Tools>
+                } else if (i == 2) {
+                    element = <LanguagesTalk language={props.elements[i]["Langues"]} experience={props.elements[i]["Expériences"]}  ></LanguagesTalk>
+                }
+
+            }
+            return <Capsule key={i} position={capsulePositions[i]} element={element} path3D={props.elements[i].path3D} />
         })
     }
 
@@ -264,18 +288,14 @@ function ArmStuct(props: ArmStructProps) {
 
 }
 
-
 function Scene3D() {
-
     const [scrollDeltaY, setScroll] = useState(0)
-    const [isLookingAtCapsule, setIsLookingAtCapsule] = useState(false)
+    const { isLookingAtCapsule } = useContext(CapsuleLookingContext)
 
     return (
         <Canvas shadows onWheel={(e) => isLookingAtCapsule ? 0 : setScroll(scrollDeltaY + -e.deltaY)} camera={{ fov: 75, position: [0, 1, 4] }}>
             <Environment files="wasteland_clouds_puresky_1k.exr" background backgroundRotation={[0, .5, 0]} />
-            <CapsuleLookingContext.Provider value={{ isLookingAtCapsule, setIsLookingAtCapsule }}>
-                <ArmStuct scrollDeltaY={scrollDeltaY} armsNumber={Object.keys(cv).length} />
-            </CapsuleLookingContext.Provider>
+            <ArmStuct scrollDeltaY={scrollDeltaY} armsNumber={Object.keys(cv).length} />
         </Canvas >
     )
 }
