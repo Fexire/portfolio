@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { useRef, useState, useMemo, useContext } from 'react'
 import { Canvas, useFrame, ThreeElements, ThreeEvent } from '@react-three/fiber'
-import { useGLTF, useAnimations, Environment, Text, MeshPortalMaterial } from '@react-three/drei'
+import { useGLTF, useAnimations, Environment, Text } from '@react-three/drei'
 import cv from "./cv.json"
 import { CapsuleLookingContext } from './main'
 import { Experience, Formation, Hobby, Languages, LanguagesTalk, Project, Tools, Void } from './elements'
@@ -176,7 +176,7 @@ function StandWithCapsules(props: StandWithCapsulesProps) {
         }
     }))
 
-    useFrame((state, delta) => {
+    useFrame((_, __) => {
         setPosition(new THREE.Vector3(props.position.x, props.position.y, props.position.z))
     })
 
@@ -245,7 +245,7 @@ function ArmStuct(props: ArmStructProps) {
         })
     }
 
-    useFrame((state, delta) => {
+    useFrame((_, __) => {
         var currentVelocity = velocity
         currentVelocity += Math.sign(deltaY - props.scrollDeltaY) * 0.01
         Math.abs(currentVelocity) > maxVelocity ? currentVelocity = Math.sign(velocity) * maxVelocity : currentVelocity = currentVelocity
@@ -269,8 +269,25 @@ function ArmStuct(props: ArmStructProps) {
 
     function generateStands() {
         return Array(props.armsNumber).fill(0).map((_, i) => {
-            var elements = cv[Object.keys(cv)[i]]
-            return <StandWithCapsules key={i} elements={elements} name={Object.keys(cv)[i]} position={standsPosition[i]} capsuleNumber={elements.length} />;
+            var elements: any = ""
+            var name = ""
+            if (i == 0) {
+                elements = cv.Formations;
+                name = "Formations";
+            } else if (i == 1) {
+                elements = cv.Compétences;
+                name = "Compétences";
+            } else if (i == 2) {
+                elements = cv['Expériences Professionnelles'];
+                name = 'Expériences Professionnelles';
+            } else if (i == 3) {
+                elements = cv['Projets personnels'];
+                name = 'Projets personnels';
+            } else if (i == 4) {
+                elements = cv.Loisirs;
+                name = 'Loisirs';
+            }
+            return <StandWithCapsules key={i} elements={elements} name={name} position={standsPosition[i]} capsuleNumber={elements.length} />;
         })
     }
 
