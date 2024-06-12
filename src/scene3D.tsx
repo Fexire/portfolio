@@ -1,10 +1,9 @@
 import * as THREE from 'three'
-import React, { useRef, useState, useMemo, createContext, useContext } from 'react'
+import { useRef, useState, useMemo, useContext } from 'react'
 import { Canvas, useFrame, ThreeElements, ThreeEvent } from '@react-three/fiber'
 import { useGLTF, useAnimations, Environment, Text } from '@react-three/drei'
 import cv from "./cv.json"
 import { CapsuleLookingContext } from './main'
-import { element } from 'three/examples/jsm/nodes/Nodes.js'
 import { Experience, Formation, Hobby, Languages, LanguagesTalk, Project, Tools, Void } from './elements'
 
 
@@ -30,10 +29,6 @@ function Pipe(props: ThreeElements['mesh']) {
     const scene = useGLTF("Pipe.glb").scene;
     const clone = useMemo(() => scene.clone(), [scene]);
     return <primitive {...props} object={clone} />
-}
-enum Category {
-    Formation,
-
 }
 
 interface CapsuleProps {
@@ -141,7 +136,7 @@ function Capsule(props: CapsuleProps) {
         }
     }
 
-    useFrame((state, delta) => {
+    useFrame((_, delta) => {
         objectRef.current.rotation.y += delta
         if (isMoving) {
             setIsMoving(moveTo(nextPosition))
@@ -169,7 +164,7 @@ function StandWithCapsules(props: StandWithCapsulesProps) {
 
 
 
-    var [capsulePositions, setCapsulePositions] = useState(Array<THREE.Vector3>(props.capsuleNumber).fill(new THREE.Vector3(0, 0, 0)).map((_, i) => {
+    var [capsulePositions, _] = useState(Array<THREE.Vector3>(props.capsuleNumber).fill(new THREE.Vector3(0, 0, 0)).map((_, i) => {
         if (props.capsuleNumber > 1) {
             const gap = 2 / (props.capsuleNumber - 1);
             const start = -1;

@@ -1,4 +1,14 @@
+import styles from "./styles.module.css"
 
+function LeftSidePanel({ children }: any) {
+    return <div className={styles.leftSide}>
+        <div className={styles.panel}>{children}</div></div>
+}
+
+function RightSidePanel({ children }: any) {
+    return <div className={styles.rightSide}>
+        <div className={styles.panel}>{children}</div></div>
+}
 export interface FormationProps {
     diploma: string
     mention: string
@@ -7,7 +17,15 @@ export interface FormationProps {
 }
 
 export function Formation(props: FormationProps) {
-    return <div>{props.diploma}<br />{props.mention}<br />{props.year}<br />{props.address}</div>
+    return <>
+        <LeftSidePanel>
+            {props.diploma}<br />{props.mention}<br />{props.year}<br />{props.address}
+        </LeftSidePanel>
+        <RightSidePanel>test</RightSidePanel>
+    </>
+
+
+
 }
 
 export interface ExperienceProps {
