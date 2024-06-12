@@ -18,17 +18,19 @@
 }
 
 .panel {
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
   position: relative;
-  font-size: 2vw;
-  color: #000000;
+  color: rgb(110, 158, 177);
   height: 50%;
   width: 80%;
   top: 25%;
   left: 10%;
   bottom: 25%;
   border-radius: 5%;
-  opacity: 50%;
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(159, 228, 255, 0.2);
+  outline-style: solid;
+  outline-color: rgb(192, 255, 255, 0.5);
 }
 
 .rightSide {
@@ -37,4 +39,44 @@
   left: 65%;
   width: 35%;
   height: 100%;
+}
+
+.semiColumn {
+  font-size: 3vmin;
+  display: grid;
+  position: relative;
+  height: 50%;
+  width: 80%;
+  margin-left: 10%;
+  text-align: center;
+  align-items: center;
+}
+
+.fullColumn {
+  font-size: 3vmin;
+  display: grid;
+  position: relative;
+  height: 100%;
+  width: 80%;
+  margin-left: 10%;
+  text-align: center;
+  align-items: center;
+}
+
+.left {
+  text-align: left;
+  font-size: 2vmin;
+}
+
+.title {
+  position: absolute;
+  left: 0%;
+  top: 10%;
+  width: 100%;
+  height: 10%;
+  font-family: "Inter", sans-serif;
+  color: rgb(110, 158, 177);
+  text-align: center;
+  font-size: 4vw;
+  font-weight: bold;
 }

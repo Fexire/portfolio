@@ -9,6 +9,12 @@ function RightSidePanel({ children }: any) {
     return <div className={styles.rightSide}>
         <div className={styles.panel}>{children}</div></div>
 }
+
+function Title({ children }: any) {
+    return <div className={styles.title}>
+        {children}</div>
+}
+
 export interface FormationProps {
     diploma: string
     mention: string
@@ -17,11 +23,37 @@ export interface FormationProps {
 }
 
 export function Formation(props: FormationProps) {
+
+    var rightSide = <><div className={styles.semiColumn}>
+        {props.mention}
+    </div>
+        <div className={styles.semiColumn}>
+            {props.address}
+        </div></>
+
+
+    if (props.mention == "") {
+        rightSide = <><div className={styles.fullColumn}>
+            {props.address}
+        </div></>
+    }
+
     return <>
+        <Title>
+            Diplôme
+        </Title>
         <LeftSidePanel>
-            {props.diploma}<br />{props.mention}<br />{props.year}<br />{props.address}
+            <div className={styles.semiColumn}>
+                {props.diploma}
+            </div>
+            <div className={styles.semiColumn}>
+                {props.year}
+            </div>
         </LeftSidePanel>
-        <RightSidePanel>test</RightSidePanel>
+        <RightSidePanel>
+            {rightSide}
+
+        </RightSidePanel>
     </>
 
 
@@ -37,7 +69,20 @@ export interface ExperienceProps {
 }
 
 export function Experience(props: ExperienceProps) {
-    return <div>{props.job}<br />{props.company}<br />{props.duration}<br />{props.address}<br />{props.missions}</div>
+    return <>
+        <Title>
+            Projet
+        </Title>
+        <LeftSidePanel>
+            <div className={styles.fullColumn}>
+                {props.job}<br /><br />{props.company}<br /><br />{props.duration}<br /><br />{props.address}
+            </div>
+        </LeftSidePanel>
+        <RightSidePanel>
+            <div className={styles.fullColumn + " " + styles.left}>
+                {props.missions.map((mission) => <>{mission}<br /><br /></>)}
+            </div>
+        </RightSidePanel></>
 }
 
 export interface ProjectProps {
@@ -46,11 +91,27 @@ export interface ProjectProps {
 }
 
 export function Project(props: ProjectProps) {
-    return <div>{props.subject}<br />{props.description}</div>
+    return <>
+        <Title>
+            Projet
+        </Title>
+        <LeftSidePanel>
+            <div className={styles.fullColumn}>
+                {props.subject}
+            </div>
+        </LeftSidePanel>
+        <RightSidePanel>
+            <div className={styles.fullColumn + " " + styles.left}>
+                {props.description}
+            </div>
+        </RightSidePanel>
+    </>
 }
 
 export function Hobby(props: ProjectProps) {
-    return <div>{props.subject}<br />{props.description}</div>
+    return <Title>
+        {props.subject}
+    </Title>
 }
 
 export interface LanguagesProps {
@@ -58,7 +119,15 @@ export interface LanguagesProps {
 }
 
 export function Languages(props: LanguagesProps) {
-    return <div>{props.names}</div>
+    return <>
+        <Title>
+            Languages de programmation
+        </Title>
+        <LeftSidePanel>
+            <div className={styles.fullColumn}>
+                {props.names.map((name) => <>{name}<br /></>)}
+            </div>
+        </LeftSidePanel></>
 }
 
 export interface ToolsProps {
@@ -66,7 +135,15 @@ export interface ToolsProps {
 }
 
 export function Tools(props: ToolsProps) {
-    return <div>{props.names}</div>
+    return <>
+        <Title>
+            Outils
+        </Title>
+        <LeftSidePanel>
+            <div className={styles.fullColumn}>
+                {props.names.map((name) => <>{name}<br /></>)}
+            </div>
+        </LeftSidePanel></>
 }
 
 export interface LanguagesTalkProps {
@@ -75,7 +152,15 @@ export interface LanguagesTalkProps {
 }
 
 export function LanguagesTalk(props: LanguagesTalkProps) {
-    return <div>{props.language}<br />{props.experience}</div>
+    return <>
+        <Title>
+            Langues
+        </Title>
+        <LeftSidePanel>
+            <div className={styles.fullColumn}>
+                {props.language.map((language, i) => <>{language} : {props.experience[i]} <br /></>)}
+            </div>
+        </LeftSidePanel></>
 }
 
 export function Void() {

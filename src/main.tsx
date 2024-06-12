@@ -11,16 +11,19 @@ interface CapsuleLoookingContextValue {
   setIsLookingAtCapsule: React.Dispatch<React.SetStateAction<boolean>>;
   element: JSX.Element;
   setElement: React.Dispatch<React.SetStateAction<JSX.Element>>;
+  blur: boolean;
+  setBlur: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const CapsuleLookingContext = createContext<CapsuleLoookingContextValue>({} as CapsuleLoookingContextValue)
 
 function App() {
   const [isLookingAtCapsule, setIsLookingAtCapsule] = useState(false)
+  const [blur, setBlur] = useState(false)
   const [element, setElement] = useState(<Void />)
 
   return <Suspense fallback={null}>
-    <CapsuleLookingContext.Provider value={{ isLookingAtCapsule, setIsLookingAtCapsule, element, setElement }}>
+    <CapsuleLookingContext.Provider value={{ isLookingAtCapsule, setIsLookingAtCapsule, element, setElement, blur, setBlur }}>
       <Informations />
       <Scene3D />
     </CapsuleLookingContext.Provider>

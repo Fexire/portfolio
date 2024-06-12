@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { useRef, useState, useMemo, useContext } from 'react'
 import { Canvas, useFrame, ThreeElements, ThreeEvent } from '@react-three/fiber'
-import { useGLTF, useAnimations, Environment, Text } from '@react-three/drei'
+import { useGLTF, useAnimations, Environment, Text, MeshPortalMaterial } from '@react-three/drei'
 import cv from "./cv.json"
 import { CapsuleLookingContext } from './main'
 import { Experience, Formation, Hobby, Languages, LanguagesTalk, Project, Tools, Void } from './elements'
@@ -48,11 +48,11 @@ function Capsule(props: CapsuleProps) {
     const objectRef = useRef<ThreeElements['primitive']>(null!)
     const capsuleRef = useRef<THREE.Group>(null!)
     var [nextPosition, setNextPosition] = useState(new THREE.Vector3(0, 0.8, 3.3))
-    const moveSpeed = 0.01
+    const moveSpeed = 0.05
     var [isMoving, setIsMoving] = useState(false)
     var [isLooking, setIsLooking] = useState(false)
     const [previousPosition, setPreviousPosition] = useState(new THREE.Vector3())
-    const { isLookingAtCapsule, setIsLookingAtCapsule, setElement } = useContext(CapsuleLookingContext)
+    const { isLookingAtCapsule, setIsLookingAtCapsule, setElement, setBlur } = useContext(CapsuleLookingContext)
 
 
     function runOpenCapsuleAnimation() {
@@ -103,6 +103,7 @@ function Capsule(props: CapsuleProps) {
                 if (isLooking) {
                     runCloseCapsuleAnimation();
                     setElement(<Void></Void>);
+                    setBlur(false);
                 } else {
                     setIsMoving(true)
                 }
@@ -128,6 +129,7 @@ function Capsule(props: CapsuleProps) {
                 runOpenCapsuleAnimation()
                 setIsLooking(!isLooking)
                 setElement(props.element)
+                setBlur(true)
             } else {
                 setIsLookingAtCapsule(false)
                 setIsLooking(!isLooking)
@@ -209,7 +211,7 @@ function StandWithCapsules(props: StandWithCapsulesProps) {
     return <group position={position}>
         <Stand onClick={(e) => { e.stopPropagation() }} />
         {generateCapsules()}
-        <Text scale={0.2} position={[0, 0.02, 0.4]} color={"white"} font={"fonts/impact.ttf"} >
+        <Text scale={0.2} position={[0, 0.02, 0.4]} color={"rgb(110, 158, 177)"} font={"fonts/impact.ttf"} >
             {props.name}
         </Text>
     </group>
@@ -285,12 +287,21 @@ function ArmStuct(props: ArmStructProps) {
 
 function Scene3D() {
     const [scrollDeltaY, setScroll] = useState(0)
-    const { isLookingAtCapsule } = useContext(CapsuleLookingContext)
+    const { isLookingAtCapsule, blur } = useContext(CapsuleLookingContext)
+    const blurMask = blur ? <mesh position={[0, 0, 2.5]}>
+        <circleGeometry args={[7, 32]} />
+        <meshPhysicalMaterial
+            transmission={1}
+            roughness={.6}
+            transparent={true}
+        />
+    </mesh > : <></>;
 
     return (
         <Canvas shadows onWheel={(e) => isLookingAtCapsule ? 0 : setScroll(scrollDeltaY + -e.deltaY)} camera={{ fov: 75, position: [0, 1, 4] }}>
             <Environment files="wasteland_clouds_puresky_1k.exr" background backgroundRotation={[0, .5, 0]} />
             <ArmStuct scrollDeltaY={scrollDeltaY} armsNumber={Object.keys(cv).length} />
+            {blurMask}
         </Canvas >
     )
 }
