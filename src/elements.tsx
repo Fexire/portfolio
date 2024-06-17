@@ -71,7 +71,7 @@ export interface ExperienceProps {
 export function Experience(props: ExperienceProps) {
     return <>
         <Title>
-            Projet
+            Expérience Professionnelle
         </Title>
         <LeftSidePanel>
             <div className={styles.fullColumn}>
